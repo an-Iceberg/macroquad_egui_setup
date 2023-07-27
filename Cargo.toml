@@ -5,7 +5,8 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+# We need 0.3.26 for macroquad and 0.21.0 for egui, otherwise we'll either get linker errors or other kinds of errors
 [dependencies]
 egui-macroquad ={ version = "0.15.0" }
-macroquad ={ version = "0.3.25" }
+macroquad ={ version = "0.3.26" }
 egui ={ version = "0.21.0" }
