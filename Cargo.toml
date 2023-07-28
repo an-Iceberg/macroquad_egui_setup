@@ -10,3 +10,6 @@ edition = "2021"
 egui-macroquad ={ version = "0.15.0" }
 macroquad ={ version = "0.3.26" }
 egui ={ version = "0.21.0" }
+
+[profile.release]
+opt-level = 3
