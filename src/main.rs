@@ -1,4 +1,4 @@
-use egui::Slider;
+use egui::{Slider, Grid};
 use macroquad::prelude::*;
 
 fn window_configuration() -> Conf
@@ -18,7 +18,12 @@ async fn main()
   let mut slider_1 = 5.;
   let mut slider_2 = 5.;
   let mut slider_3 = 5.;
-  let mut colour = [255., 0., 255.];
+  let mut path_colour = [0., 1., 0.];
+  let mut point_colour = [1., 0.5, 0.];
+  let mut line_colour = [0., 1., 1.];
+  let mut bg_colour = [0.25, 0., 0.5];
+  let mut line_length = 10;
+  let mut radius = 13;
 
   loop
   { clear_background(BLACK);
@@ -91,28 +96,58 @@ async fn main()
             let _ = ui.button("Large");
           });
 
-          if mode == Mode::Path
-          { ui.separator();
-            let _ = ui.button("Find shortest path");
-            ui.horizontal(|ui|
-            { ui.label("Pick the color of the path:");
-              ui.color_edit_button_rgb(&mut colour);
-            });
+          match mode
+          { Mode::Line =>
+            { ui.label("Line length:");
+              ui.add(Slider::new(&mut line_length, 1..=255).logarithmic(true));
+            }
+            Mode::Path =>
+            { ui.separator();
+              let _ = ui.button("Find shortest path");
+              ui.horizontal(|ui|
+              { ui.label("Pick the color of the path:");
+                ui.color_edit_button_rgb(&mut path_colour);
+              });
+            }
+            _ => ()
           }
 
           ui.separator();
 
-          // 51. difference
-          ui.add_space(if mode == Mode::Path { 334. } else { 385. });
+          ui.add_space(150.);
 
           ui.separator();
 
-          ui.label("Adjust angle:");
+          ui.label("Angle:");
           ui.add(Slider::new(&mut slider_1, 0.0..=10.0));
-          ui.label("Adjust wing size:");
+          ui.label("Wing size:");
           ui.add(Slider::new(&mut slider_2, 0.0..=10.0));
-          ui.label("Adjust base point:");
+          ui.label("Base point:");
           ui.add(Slider::new(&mut slider_3, 0.0..=10.0));
+
+          ui.separator();
+
+          ui.label("Radius");
+          ui.add(Slider::new(&mut radius, 7..=20));
+
+          ui.separator();
+
+          Grid::new("colours")
+            .num_columns(2)
+            .striped(false)
+            .show(ui, |ui|
+            { ui.label("Point colour:");
+              ui.color_edit_button_rgb(&mut point_colour);
+              ui.end_row();
+
+              ui.label("Line colour:");
+              ui.color_edit_button_rgb(&mut line_colour);
+              ui.end_row();
+
+              ui.label("Background colour:");
+              ui.color_edit_button_rgb(&mut bg_colour);
+              ui.end_row();
+            });
 
           // ui.separator();
 
